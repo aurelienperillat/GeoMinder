@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.geominder.esiea.geonav.AjouterActivity"
+    android:layout_marginLeft="-2dp"
+    android:layout_marginRight="-2dp">
+
+    <RelativeLayout
+        android:id="@+id/bar_modifier"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="-2dp"
+        android:layout_marginRight="-2dp"
+        android:background="@drawable/background_bartop">
+
+        <ImageButton
+            android:id="@+id/boutonback1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/left"
+            android:background="@color/BelizeHole"
+            android:onClick="homeAction"/>
+
+        <TextView
+            android:id="@+id/gererTitre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modifier"
+            android:textColor="@color/Clouds"
+            android:layout_weight="0.9"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bar_modifier"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/Clouds">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/background_formulaire">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Titre"
+                android:layout_weight="0.5"
+                android:textColor="@color/MidnightBlue"
+                android:textAlignment="center"/>
+
+            <EditText
+                android:id="@+id/edit_titre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:hint="titre"
+                android:textColorHint="@color/Silver"
+                android:inputType="textMultiLine"
+                android:textAlignment="center"
+                android:textColor="@color/BelizeHole"
+                android:textStyle="italic"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/background_formulaire">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Récurrence"
+                android:layout_weight="0.7"
+                android:textColor="@color/MidnightBlue"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/tv_lundi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="L"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="lundiAction"/>
+
+            <TextView
+                android:id="@+id/tv_mardi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="M"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="mardiAction"/>
+
+            <TextView
+                android:id="@+id/tv_mercredi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="M"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="mercrediAction"/>
+
+            <TextView
+                android:id="@+id/tv_jeudi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="J"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="jeudiAction"/>
+
+            <TextView
+                android:id="@+id/tv_vendredi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="V"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="vendrediAction"/>
+
+            <TextView
+                android:id="@+id/tv_samedi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="samediAction"/>
+
+            <TextView
+                android:id="@+id/tv_dimanche"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="D"
+                android:textColor="@color/Silver"
+                android:layout_weight="0.1"
+                android:onClick="dimancheAction"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            android:background="@drawable/background_formulaire">
+
+            <TextView
+                android:id="@+id/tv_lieu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adresse"
+                android:layout_weight="0.5"
+                android:textAlignment="center"
+                android:textColor="@color/BelizeHole"
+                android:onClick="selectPlace"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.1"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:background="@drawable/background_formulaire">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="De"
+                android:textAlignment="center"
+                android:textColor="@color/MidnightBlue"
+                android:layout_weight="0.2" />
+
+            <TextView
+                android:id="@+id/edit_depart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:inputType="time"
+                android:hint="00:00"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:textColor="@color/Silver"
+                android:onClick="showTimeDepartAction"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textAlignment="center"
+                android:textColor="@color/MidnightBlue"
+                android:layout_weight="0.2" />
+
+            <TextView
+                android:id="@+id/edit_fin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:hint="00:00"
+                android:textColor="@color/Silver"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:onClick="showTimeFinAction"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-3dp"
+            android:layout_marginRight="-3dp"
+            android:text="Enregistrer"
+            android:textColor="@color/Clouds"
+            android:background="@drawable/background_bouton_2"
+            android:onClick="enregistrerAction"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-3dp"
+            android:layout_marginRight="-3dp"
+            android:layout_marginTop="2dp"
+            android:text="Supprimer"
+            android:textColor="@color/Clouds"
+            android:background="@drawable/background_bouton_delete"
+            android:onClick="supprimerAction"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

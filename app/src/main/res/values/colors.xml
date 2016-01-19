@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="PeterRiver">#2196f3</color>
+    <color name="BelizeHole">#2980b9</color>
+    <color name="Nephirtis">#27ae60</color>
+    <color name="Clouds">#ecf0f1</color>
+    <color name="Silver">#bdc3c7</color>
+    <color name="Pumpkin">#d35400</color>
+    <color name="Pomegranate">#c0392b</color>
+    <color name="MidnightBlue">#2c3e50</color>
+    <color name="primary_text_default_material_light">#de000000</color>
+
+</resources>

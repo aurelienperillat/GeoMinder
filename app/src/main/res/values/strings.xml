@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Geonav</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="gerer">Gérer</string>
+</resources>
