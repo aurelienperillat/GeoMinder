@@ -91,6 +91,27 @@
             android:layout_weight="0.1"
             android:gravity="center"
             android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            android:background="@drawable/background_rv"
+            android:onClick="selectPlace">
+
+            <TextView
+                android:id="@+id/tv_lieu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lieux"
+                android:textAlignment="center"
+                android:textColor="@color/MidnightBlue" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
             android:background="@drawable/background_rv">
 
             <TextView
@@ -163,27 +184,6 @@
                 android:textColor="@color/Silver"
                 android:layout_weight="0.1"
                 android:onClick="dimancheAction"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="0.1"
-            android:gravity="center"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal"
-            android:background="@drawable/background_rv">
-
-            <TextView
-                android:id="@+id/tv_lieu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lieux"
-                android:textAlignment="center"
-                android:textColor="@color/MidnightBlue"
-                android:onClick="selectPlace" />
-
-
         </LinearLayout>
 
         <LinearLayout

@@ -1,6 +1,8 @@
 package com.geominder.esiea.geonav;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.util.TimeUtils;
@@ -49,12 +51,13 @@ public class AjouterActivity extends AppCompatActivity {
     private int PLACE_PICKER_REQUEST = 1;
     private TimePickerDialog tpdDepart, tpdFin;
     private TextView timeDepart, timeFin, lieu;
-    private EditText titreSelect;
+    private EditText titreSelect = null;
     private boolean dayState[] = {false,false,false,false,false,false,false};
     private TextView L,Ma,Me,J,V,S,D;
     private ArrayList<Alarme> listAlarme = new ArrayList<Alarme>();
     private File fileAlarme;
     private Place place = null;
+    private DialogInterface.OnClickListener alertListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +111,24 @@ public class AjouterActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String time;
-                if(minute == 0)
-                    time = hourOfDay+":00";
-                else
-                    time = hourOfDay+":"+minute;
+                if(minute == 0 && hourOfDay != 0) {
+                    time = hourOfDay + ":00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if(hourOfDay == 0 && minute != 0) {
+                    time = "00:" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if (hourOfDay == 0 && minute == 0){
+                    time = "00:00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.Silver));
+                }
+                else {
+                    time = hourOfDay + ":" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
 
                 timeDepart.setText(time);
-                timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
             }
         },12,0,true);
 
@@ -122,13 +136,24 @@ public class AjouterActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String time;
-                if(minute == 0)
-                    time = hourOfDay+":00";
-                else
-                    time = hourOfDay+":"+minute;
+                if(minute == 0 && hourOfDay != 0) {
+                    time = hourOfDay + ":00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if(hourOfDay == 0 && minute != 0) {
+                    time = "00:" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if (hourOfDay == 0 && minute == 0){
+                    time = "00:00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.Silver));
+                }
+                else {
+                    time = hourOfDay + ":" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
 
-                timeFin.setText(time);
-                timeFin.setTextColor(getResources().getColor(R.color.BelizeHole));
+                timeDepart.setText(time);
             }
         },12,0,true);
 
@@ -182,16 +207,25 @@ public class AjouterActivity extends AppCompatActivity {
     }
 
     public void enregistrerAction(View v) {
-        Alarme alarme = new Alarme(titreSelect.getText().toString(), place.getName().toString(),
-                timeDepart.getText().toString(),timeFin.getText().toString(),place.getAddress().toString(),
-                place.getLatLng(),dayState,true);
-        listAlarme.add(alarme);
+        if(titreSelect.getText() == null || (titreSelect.getText() != null && titreSelect.getText().toString().equals("")) || place == null ) {
+            AlertDialog.Builder alertDialog;
+            alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setMessage("Formulaire mal rempli veuillez au moins indiquer un titre et un lieu");
+            alertDialog.setNeutralButton("Fermer", alertListener);
+            alertDialog.show();
+        }
+        else {
+            Alarme alarme = new Alarme(titreSelect.getText().toString(), place.getName().toString(),
+                    timeDepart.getText().toString(), timeFin.getText().toString(), place.getAddress().toString(),
+                    place.getLatLng(), dayState, true);
+            listAlarme.add(alarme);
 
-        saveListAlarmeToFile(listAlarme, fileAlarme);
+            saveListAlarmeToFile(listAlarme, fileAlarme);
 
-        Intent intent = new Intent(this, GererActivity.class);
-        Toast.makeText(getApplicationContext(), "Alarme ajoutée !", Toast.LENGTH_LONG).show();
-        startActivity(intent);
+            Intent intent = new Intent(this, GererActivity.class);
+            Toast.makeText(getApplicationContext(), "Alarme ajoutée !", Toast.LENGTH_LONG).show();
+            startActivity(intent);
+        }
     }
 
     public void homeAction(View v){

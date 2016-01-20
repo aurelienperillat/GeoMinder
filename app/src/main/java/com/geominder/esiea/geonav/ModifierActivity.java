@@ -1,6 +1,8 @@
 package com.geominder.esiea.geonav;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -45,9 +48,11 @@ public class ModifierActivity extends AppCompatActivity {
     private boolean dayState[] = {false,false,false,false,false,false,false};
     private ArrayList<Alarme> listAlarme = new ArrayList<Alarme>();
     private File fileAlarme;
+    private String name, adresse;
+    private LatLng latLng;
     private int position;
-    private Place place = null;
     private int PLACE_PICKER_REQUEST = 1;
+    private DialogInterface.OnClickListener alertListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,18 +107,32 @@ public class ModifierActivity extends AppCompatActivity {
         loadListAlarmeFromFile(listAlarme, fileAlarme);
 
         Alarme alarme = listAlarme.get(position);
+        name = alarme.getLieu();
+        adresse = alarme.getAdresse();
+        latLng = new LatLng(alarme.getLatitude(),alarme.getLongitude());
 
         tpdDepart = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String time;
-                if(minute == 0)
-                    time = hourOfDay+":00";
-                else
-                    time = hourOfDay+":"+minute;
+                if(minute == 0 && hourOfDay != 0) {
+                    time = hourOfDay + ":00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if(hourOfDay == 0 && minute != 0) {
+                    time = "00:" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if (hourOfDay == 0 && minute == 0){
+                    time = "00:00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.Silver));
+                }
+                else {
+                    time = hourOfDay + ":" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
 
                 timeDepart.setText(time);
-                timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
             }
         },12,0,true);
 
@@ -121,13 +140,24 @@ public class ModifierActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String time;
-                if(minute == 0)
-                    time = hourOfDay+":00";
-                else
-                    time = hourOfDay+":"+minute;
+                if(minute == 0 && hourOfDay != 0) {
+                    time = hourOfDay + ":00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if(hourOfDay == 0 && minute != 0) {
+                    time = "00:" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
+                else if (hourOfDay == 0 && minute == 0){
+                    time = "00:00";
+                    timeDepart.setTextColor(getResources().getColor(R.color.Silver));
+                }
+                else {
+                    time = hourOfDay + ":" + minute;
+                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                }
 
-                timeFin.setText(time);
-                timeFin.setTextColor(getResources().getColor(R.color.BelizeHole));
+                timeDepart.setText(time);
             }
         },12,0,true);
 
@@ -208,8 +238,11 @@ public class ModifierActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                place = PlacePicker.getPlace(data, this);
-                lieu.setText(place.getName());
+                Place place = PlacePicker.getPlace(data, this);
+                name = place.getName().toString();
+                adresse = place.getAddress().toString();
+                latLng = place.getLatLng();
+                lieu.setText(name);
                 lieu.setTextColor(getResources().getColor(R.color.BelizeHole));
                 Log.d("Place Picker", "result OK !");
             }
@@ -246,17 +279,26 @@ public class ModifierActivity extends AppCompatActivity {
     }
 
     public void enregistrerAction(View v){
-        Alarme alarme = new Alarme(editTitre.getText().toString(),place.getName().toString(),
-                timeDepart.getText().toString(),timeFin.getText().toString(),place.getAddress().toString(),
-                place.getLatLng(),dayState,true);
-        listAlarme.remove(position);
-        listAlarme.add(position, alarme);
+        if(editTitre.getText() == null || (editTitre.getText() != null && editTitre.getText().toString().equals(""))) {
+            AlertDialog.Builder alertDialog;
+            alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setMessage("Formulaire mal rempli veuillez au moins indiquer un titre et un lieu");
+            alertDialog.setNeutralButton("Fermer", alertListener);
+            alertDialog.show();
+        }
+        else {
+            Alarme alarme = new Alarme(editTitre.getText().toString(), name,
+                    timeDepart.getText().toString(), timeFin.getText().toString(), adresse,
+                    latLng, dayState, true);
+            listAlarme.remove(position);
+            listAlarme.add(position, alarme);
 
-        saveListAlarmeToFile(listAlarme, fileAlarme);
+            saveListAlarmeToFile(listAlarme, fileAlarme);
 
-        Toast.makeText(getApplicationContext(), "Alarme modifiée !", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, GererActivity.class);
-        startActivity(intent);
+            Toast.makeText(getApplicationContext(), "Alarme modifiée !", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, GererActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void supprimerAction(View v){
