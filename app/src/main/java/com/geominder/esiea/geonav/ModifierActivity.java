@@ -359,9 +359,11 @@ public class ModifierActivity extends AppCompatActivity {
         listAlarme.remove(position);
         saveListAlarmeToFile(listAlarme, fileAlarme);
 
-        List<String> geofenceRequestId = new ArrayList<String>();
-        geofenceRequestId.add(alarme1.getTitre());
-        LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, geofenceRequestId);
+        if(mGoogleApiClient.isConnected()) {
+            List<String> geofenceRequestId = new ArrayList<String>();
+            geofenceRequestId.add(alarme1.getTitre());
+            LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, geofenceRequestId);
+        }
 
         Toast.makeText(getApplicationContext(), "Alarme suprimée !", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, GererActivity.class);
