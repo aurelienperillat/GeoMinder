@@ -1,14 +1,24 @@
 package com.geominder.esiea.geonav;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.provider.SyncStateContract;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.TimeUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.internal.view.menu.ListMenuItemView;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -28,6 +38,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -60,6 +72,10 @@ public class AjouterActivity extends AppCompatActivity {
     private File fileAlarme;
     private Place place = null;
     private DialogInterface.OnClickListener alertListener;
+    private PendingIntent mGeofencePendingIntent;
+    private Geofence geofence;
+
+    public final static String ALERTE = "com.octip.cours.inf4042_11.BIERS_UPDATE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +97,7 @@ public class AjouterActivity extends AppCompatActivity {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
+                .addApi(LocationServices.API)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
@@ -140,22 +157,22 @@ public class AjouterActivity extends AppCompatActivity {
                 String time;
                 if(minute == 0 && hourOfDay != 0) {
                     time = hourOfDay + ":00";
-                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                    timeFin.setTextColor(getResources().getColor(R.color.BelizeHole));
                 }
                 else if(hourOfDay == 0 && minute != 0) {
                     time = "00:" + minute;
-                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                    timeFin.setTextColor(getResources().getColor(R.color.BelizeHole));
                 }
                 else if (hourOfDay == 0 && minute == 0){
                     time = "00:00";
-                    timeDepart.setTextColor(getResources().getColor(R.color.Silver));
+                    timeFin.setTextColor(getResources().getColor(R.color.Silver));
                 }
                 else {
                     time = hourOfDay + ":" + minute;
-                    timeDepart.setTextColor(getResources().getColor(R.color.BelizeHole));
+                    timeFin.setTextColor(getResources().getColor(R.color.BelizeHole));
                 }
 
-                timeDepart.setText(time);
+                timeFin.setText(time);
             }
         },12,0,true);
 
@@ -166,6 +183,23 @@ public class AjouterActivity extends AppCompatActivity {
         V.setText(Html.fromHtml("<i>V</i>"));
         S.setText(Html.fromHtml("<i>S</i>"));
         D.setText(Html.fromHtml("<i>D</i>"));
+    }
+
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofence(geofence);
+        return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+
+        mGeofencePendingIntent = GeofenceService.startActionFoo(this);
+        return mGeofencePendingIntent;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -224,20 +258,36 @@ public class AjouterActivity extends AppCompatActivity {
 
             saveListAlarmeToFile(listAlarme, fileAlarme);
 
+            geofence = new Geofence.Builder().setRequestId(alarme.getTitre())
+                    .setCircularRegion(alarme.getLatitude(), alarme.getLongitude(), 500)
+                    .setExpirationDuration(10000)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .build();
+
+            if(mGoogleApiClient.isConnected()){
+                LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, getGeofencingRequest(), getGeofencePendingIntent());
+
+                IntentFilter intentFilter = new IntentFilter(ALERTE);
+                LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new GeofenceAlerte(), intentFilter);
+            }
+
             Intent intent = new Intent(this, GererActivity.class);
             Toast.makeText(getApplicationContext(), "Alarme ajoutée !", Toast.LENGTH_LONG).show();
             startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 
     public void homeAction(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public void annulerAction(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public void showTimeDepartAction(View v){
@@ -387,6 +437,40 @@ public class AjouterActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    class GeofenceAlerte extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent){
+            String geofenceTransitionDetails = intent.getStringExtra("geofenceTransitionDetails");
+            sendNotification(geofenceTransitionDetails);
+        }
+
+        private void sendNotification(String notificationDetails) {
+
+            Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(notificationIntent);
+
+            PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+            builder.setSmallIcon(R.mipmap.ic_launcher)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                            R.mipmap.ic_launcher))
+                    .setColor(Color.RED)
+                    .setContentTitle(notificationDetails)
+                    .setContentText(lieu.getText())
+                    .setContentIntent(notificationPendingIntent);
+            builder.setAutoCancel(true);
+
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.notify(0, builder.build());
         }
     }
 }

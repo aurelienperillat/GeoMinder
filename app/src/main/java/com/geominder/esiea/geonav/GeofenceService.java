@@ -75,18 +75,14 @@ public class GeofenceService extends IntentService {
 
             // Get the geofences that were triggered. A single event can trigger
             // multiple geofences.
-            List triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
             // Get the transition details as a String.
-            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-                    this,
-                    geofenceTransition,
-                    triggeringGeofences
-            );
+            String geofenceTransitionDetails = getGeofenceTransitionDetails(this, geofenceTransition, triggeringGeofences);
 
             // Send notification and log the transition details.
-            Intent intent1 = new Intent(MainActivity.ALERTE);
-            intent.putExtra("geofenceTransitionDetails", geofenceTransitionDetails);
+            Intent intent1 = new Intent(AjouterActivity.ALERTE);
+            intent1.putExtra("geofenceTransitionDetails", geofenceTransitionDetails);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent1);
 
@@ -110,14 +106,14 @@ public class GeofenceService extends IntentService {
             }
             String triggeringGeofencesIdsString = TextUtils.join(", ", triggeringGeofencesIdsList);
 
-            return geofenceTransitionString;
+            return triggeringGeofencesIdsString;
 
         }
 
         private String getTransitionString(int transitionType) {
             switch (transitionType) {
                 case Geofence.GEOFENCE_TRANSITION_ENTER:
-                    return "Welcome";
+                    return "Enter : ";
                 default:
                     return null;
             }

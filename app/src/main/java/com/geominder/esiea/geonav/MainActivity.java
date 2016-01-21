@@ -65,8 +65,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private PendingIntent mGeofencePendingIntent = null;
     private GoogleApiClient mGoogleApiClient;
 
-    public final static String ALERTE = "com.octip.cours.inf4042_11.BIERS_UPDATE";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,22 +83,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
-                        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, getGeofencingRequest(), getGeofencePendingIntent());
-
                         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                         if (mLastLocation != null) {
                             LatLng myLatlng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLatlng));
                         }
-
-                        IntentFilter intentFilter = new IntentFilter(ALERTE);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new GeofenceAlerte(), intentFilter);
                     }
 
                     @Override
@@ -117,23 +108,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
     }
 
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(geofences);
-        return builder.build();
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
-        }
-
-        mGeofencePendingIntent = GeofenceService.startActionFoo(this);
-        return mGeofencePendingIntent;
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -146,13 +120,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng latLng = new LatLng(alarme.getLatitude(), alarme.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(latLng).title(alarme.getLieu().toString())
                         .snippet(alarme.getTitre()));
-
-                geofences.add(new Geofence.Builder().setRequestId("MyLocationGeofence")
-                        .setRequestId(alarme.getTitre())
-                        .setCircularRegion(alarme.getLatitude(),alarme.getLongitude() , 100)
-                        .setExpirationDuration(10000)
-                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-                        .build());
             }
         }
     }
@@ -160,11 +127,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void ajouterAction(View v){
         Intent intent = new Intent(this, AjouterActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     public void gererAction(View v){
         Intent intent = new Intent(this, GererActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void saveListAlarmeToFile(ArrayList<Alarme> listAlarme, File file) {
@@ -216,43 +185,5 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mGoogleApiClient.disconnect();
         super.onStop();
         Log.d("Google Place", "Connexion finis");
-    }
-
-    class GeofenceAlerte extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent){
-            String geofenceTransitionDetails = intent.getStringExtra("geofenceTransitionDetails");
-            sendNotification(geofenceTransitionDetails);
-        }
-
-        /**
-         * Posts a notification in the notification bar when a transition is detected.
-         * If the user clicks the notification, control goes to the MainActivity.
-         */
-        private void sendNotification(String notificationDetails) {
-
-            Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-            stackBuilder.addParentStack(MainActivity.class);
-            stackBuilder.addNextIntent(notificationIntent);
-
-            PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-            builder.setSmallIcon(R.mipmap.ic_launcher)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                            R.mipmap.ic_launcher))
-                    .setColor(Color.RED)
-                    .setContentTitle(notificationDetails)
-                    .setContentText("Welcome")
-                    .setContentIntent(notificationPendingIntent);
-            builder.setAutoCancel(true);
-
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            mNotificationManager.notify(0, builder.build());
-        }
     }
 }
