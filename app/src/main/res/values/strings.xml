@@ -1,5 +1,28 @@
 <resources>
-    <string name="app_name">Geonav</string>
+    <string name="app_name">GeoMinder</string>
     <string name="ajouter">Ajouter</string>
     <string name="gerer">Gérer</string>
+    <string name="titre">Titre</string>
+    <string name="lieu">Lieu</string>
+    <string name="recurence">Récurence</string>
+    <string name="de">De</string>
+    <string name="a">A</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="modifier">Modifier</string>
+    <string name="annuler">Annuler</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="lundi">L</string>
+    <string name="mardi">M</string>
+    <string name="mercredi">M</string>
+    <string name="jeudi">J</string>
+    <string name="vendredi">V</string>
+    <string name="samedi">S</string>
+    <string name="dimanche">D</string>
+    <string name="timedef">00:00</string>
+    <string name="arrow">-></string>
+    <string name="plus">+</string>
+    <string name="fermer">Fermer</string>
+    <string name="ajoutalarme">Alarme ajoutée !</string>
+    <string name="supressionalarme">Alarme suprimée !</string>
+    <string name="modificationalarme">Alarme modifée !</string>
 </resources>

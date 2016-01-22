@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GeoMinder</string>
+    <string name="ajouter">Add</string>
+    <string name="gerer">Manage</string>
+    <string name="titre">Title</string>
+    <string name="lieu">Place</string>
+    <string name="recurence">Récurence</string>
+    <string name="de">From</string>
+    <string name="a">To</string>
+    <string name="enregistrer">Save</string>
+    <string name="modifier">Modify</string>
+    <string name="annuler">Cancel</string>
+    <string name="supprimer">Delete</string>
+    <string name="lundi">M</string>
+    <string name="mardi">T</string>
+    <string name="mercredi">W</string>
+    <string name="jeudi">T</string>
+    <string name="vendredi">F</string>
+    <string name="samedi">S</string>
+    <string name="dimanche">S</string>
+    <string name="timedef">00:00</string>
+    <string name="arrow">-></string>
+    <string name="plus">+</string>
+    <string name="fermer">Close</string>
+    <string name="ajoutalarme">Alarm added !</string>
+    <string name="supressionalarme">Alarm  deleted!</string>
+    <string name="modificationalarme">Alarm modified !</string>
+</resources>

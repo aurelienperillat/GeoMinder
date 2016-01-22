@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,20 +22,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -44,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GererActivity extends AppCompatActivity {
-    private ArrayList<Alarme> listAlarme = new ArrayList<Alarme>();
+    private ArrayList<Alarme> listAlarme = new ArrayList<>();
     private File fileAlarme;
     protected RecyclerView recyclerView;
     private GoogleApiClient mGoogleApiClient;
@@ -62,7 +59,7 @@ public class GererActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView)findViewById(R.id.listeAlarme);
 
-        String filePath = this.getFilesDir().getPath().toString() + "/liste_alarme.txt";
+        String filePath = this.getFilesDir().getPath() + "/liste_alarme.txt";
         fileAlarme = new File(filePath);
         try {
             fileAlarme.createNewFile();
@@ -149,37 +146,33 @@ public class GererActivity extends AppCompatActivity {
                 dataOut.writeObject(alarme);
 
             dataOut.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-   private void loadListAlarmeFromFile(ArrayList<Alarme> listAlarme, File file){
-       try{
-           ObjectInputStream dataIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+    private void loadListAlarmeFromFile(ArrayList<Alarme> listAlarme, File file){
+        try{
+            ObjectInputStream dataIn = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
 
-           Alarme alarme;
-           try {
+            Alarme alarme;
+            try {
 
-               while ((alarme = (Alarme)dataIn.readObject()) != null)
+                while ((alarme = (Alarme)dataIn.readObject()) != null)
                     listAlarme.add(alarme);
 
-           } catch (ClassNotFoundException e) {
-               e.printStackTrace();
-           }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
-           dataIn.close();
-       } catch (FileNotFoundException e) {
-           e.printStackTrace();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+            dataIn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder> {
-        private ArrayList<Alarme> listAlarme = new ArrayList<Alarme>();
+        private ArrayList<Alarme> listAlarme = new ArrayList<>();
 
         public AlarmAdapter(ArrayList<Alarme> listAlarme){
             this.listAlarme = listAlarme;
@@ -195,7 +188,7 @@ public class GererActivity extends AppCompatActivity {
         public void onBindViewHolder(AlarmHolder holder, int position) {
             holder.titre.setText(listAlarme.get(position).getTitre());
 
-            if (listAlarme.get(position).getIsActivated() == true) {
+            if (listAlarme.get(position).getIsActivated()) {
                 holder.state.setChecked(true);
                 holder.titre.setTextColor(getResources().getColor(R.color.BelizeHole));
             }
@@ -248,7 +241,7 @@ public class GererActivity extends AppCompatActivity {
                             listAlarme.get(position).setIsActivated(false);
 
                             if(mGoogleApiClient.isConnected()){
-                                List<String> geofenceRequestId = new ArrayList<String>();
+                                List<String> geofenceRequestId = new ArrayList<>();
                                 geofenceRequestId.add(listAlarme.get(position).getTitre());
 
                                 LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, geofenceRequestId);

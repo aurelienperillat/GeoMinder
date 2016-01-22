@@ -11,18 +11,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -44,7 +41,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -59,13 +55,12 @@ public class ModifierActivity extends AppCompatActivity {
     private TextView timeDepart, timeFin, lieu;
     private TextView L,Ma,Me,J,V,S,D;
     private boolean dayState[] = {false,false,false,false,false,false,false};
-    private ArrayList<Alarme> listAlarme = new ArrayList<Alarme>();
+    private ArrayList<Alarme> listAlarme = new ArrayList<>();
     private File fileAlarme;
     private String name, adresse;
     private LatLng latLng;
     private int position;
     private int PLACE_PICKER_REQUEST = 1;
-    private DialogInterface.OnClickListener alertListener;
     private PendingIntent mGeofencePendingIntent;
     private Geofence geofence;
 
@@ -115,7 +110,7 @@ public class ModifierActivity extends AppCompatActivity {
                 .build();
 
 
-        String filePath = this.getFilesDir().getPath().toString() + "/liste_alarme.txt";
+        String filePath = this.getFilesDir().getPath() + "/liste_alarme.txt";
         fileAlarme = new File(filePath);
         try {
             fileAlarme.createNewFile();
@@ -188,68 +183,68 @@ public class ModifierActivity extends AppCompatActivity {
 
         alarme.getDayState(dayState);
         for(int i = 0; i < dayState.length; i++){
-            if(dayState[i] == true)
+            if(dayState[i])
                 Log.d("TAG", "daystate["+i+"] = true");
             else
                 Log.d("TAG", "daystate["+i+"] = false");
         }
 
-        if(dayState[0] == true) {
+        if(dayState[0]) {
             L.setTextColor(getResources().getColor(R.color.BelizeHole));
-            L.setText("L");
+            L.setText(getResources().getString(R.string.lundi));
         }
-        if(dayState[1] == true) {
+        if(dayState[1]) {
             Ma.setTextColor(getResources().getColor(R.color.BelizeHole));
-            Ma.setText("M");
+            Ma.setText(getResources().getString(R.string.mardi));
         }
-        if(dayState[2] == true) {
+        if(dayState[2]) {
             Me.setTextColor(getResources().getColor(R.color.BelizeHole));
-            Me.setText("M");
+            Me.setText(getResources().getString(R.string.mercredi));
         }
-        if(dayState[3] == true) {
+        if(dayState[3]) {
             J.setTextColor(getResources().getColor(R.color.BelizeHole));
-            J.setText("J");
+            J.setText(getResources().getString(R.string.jeudi));
         }
-        if(dayState[4] == true) {
+        if(dayState[4]) {
             V.setTextColor(getResources().getColor(R.color.BelizeHole));
-            V.setText("V");
+            V.setText(getResources().getString(R.string.vendredi));
         }
-        if(dayState[5] == true) {
+        if(dayState[5]) {
             S.setTextColor(getResources().getColor(R.color.BelizeHole));
-            S.setText("S");
+            S.setText(getResources().getString(R.string.samedi));
         }
-        if(dayState[6] == true) {
+        if(dayState[6]) {
             D.setTextColor(getResources().getColor(R.color.BelizeHole));
-            D.setText("D");
+            D.setText(getResources().getString(R.string.dimanche));
         }
 
-        if(dayState[0] == false) {
+        if(!dayState[0]) {
             L.setTextColor(getResources().getColor(R.color.Silver));
-            L.setText(Html.fromHtml("<i>L</i>"));
+            L.setText(Html.fromHtml("<i>"+getResources().getString(R.string.lundi)+"</i>"));
         }
-        if(dayState[1] == false) {
+        if(!dayState[1]) {
             Ma.setTextColor(getResources().getColor(R.color.Silver));
-            Ma.setText(Html.fromHtml("<i>M</i>"));
+            Ma.setText(Html.fromHtml("<i>"+getResources().getString(R.string.mardi)+"</i>"));
         }
-        if(dayState[2] == false) {
+        if(!dayState[2]) {
             Me.setTextColor(getResources().getColor(R.color.Silver));
-            Me.setText(Html.fromHtml("<i>M</i>"));
+            Me.setText(Html.fromHtml("<i>"+getResources().getString(R.string.mercredi)+"</i>"));
         }
-        if(dayState[3] == false) {
+        if(!dayState[3]) {
             J.setTextColor(getResources().getColor(R.color.Silver));
-            J.setText(Html.fromHtml("<i>J</i>"));
+            J.setText(Html.fromHtml("<i>"+getResources().getString(R.string.jeudi)+"</i>"));
         }
-        if(dayState[4] == false) {
+        if(!dayState[4]) {
             V.setTextColor(getResources().getColor(R.color.Silver));
-            V.setText(Html.fromHtml("<i>V</i>"));
+            V.setText(Html.fromHtml("<i>"+getResources().getString(R.string.vendredi)+"</i>"));
         }
-        if(dayState[5] == false) {
+        if(!dayState[5]) {
             S.setTextColor(getResources().getColor(R.color.Silver));
-            S.setText(Html.fromHtml("<i>S</i>"));
+            S.setText(Html.fromHtml("<i>"+getResources().getString(R.string.samedi)+"</i>"));
         }
-        if(dayState[6] == false) {
+        if(!dayState[6]) {
             D.setTextColor(getResources().getColor(R.color.Silver));
-            D.setText(Html.fromHtml("<i>D</i>"));
+            D.setText(Html.fromHtml("<i>"+getResources().getString(R.string.dimanche)+"</i>"));
         }
     }
 
@@ -318,7 +313,12 @@ public class ModifierActivity extends AppCompatActivity {
             AlertDialog.Builder alertDialog;
             alertDialog = new AlertDialog.Builder(this);
             alertDialog.setMessage("Formulaire mal rempli veuillez au moins indiquer un titre et un lieu");
-            alertDialog.setNeutralButton("Fermer", alertListener);
+            alertDialog.setNeutralButton(R.string.fermer, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
             alertDialog.show();
         }
         else {
@@ -338,7 +338,7 @@ public class ModifierActivity extends AppCompatActivity {
                     .build();
 
             if(mGoogleApiClient.isConnected()){
-                List<String> geofenceRequestId = new ArrayList<String>();
+                List<String> geofenceRequestId = new ArrayList<>();
                 geofenceRequestId.add(alarme1.getTitre());
                 LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, geofenceRequestId );
                 LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, getGeofencingRequest(), getGeofencePendingIntent());
@@ -347,7 +347,7 @@ public class ModifierActivity extends AppCompatActivity {
                 LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(new GeofenceAlerte(), intentFilter);
             }
 
-            Toast.makeText(getApplicationContext(), "Alarme modifiée !", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.modificationalarme), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, GererActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -360,12 +360,12 @@ public class ModifierActivity extends AppCompatActivity {
         saveListAlarmeToFile(listAlarme, fileAlarme);
 
         if(mGoogleApiClient.isConnected()) {
-            List<String> geofenceRequestId = new ArrayList<String>();
+            List<String> geofenceRequestId = new ArrayList<>();
             geofenceRequestId.add(alarme1.getTitre());
             LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, geofenceRequestId);
         }
 
-        Toast.makeText(getApplicationContext(), "Alarme suprimée !", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.supressionalarme), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, GererActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -386,110 +386,95 @@ public class ModifierActivity extends AppCompatActivity {
     }
 
     public void lundiAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_lundi);
-
-        if(dayState[0] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("L");
+        if(!dayState[0]) {
+            L.setTextColor(getResources().getColor(R.color.BelizeHole));
+            L.setText(getResources().getString(R.string.lundi));
             dayState[0] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>L</i>"));
+            L.setTextColor(getResources().getColor(R.color.Silver));
+            L.setText(Html.fromHtml("<i>"+getResources().getString(R.string.lundi)+"</i>"));
             dayState[0] = false;
         }
     }
 
     public void mardiAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_mardi);
-
-        if(dayState[1] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("M");
+        if(!dayState[1]) {
+            Ma.setTextColor(getResources().getColor(R.color.BelizeHole));
+            Ma.setText(getResources().getString(R.string.mardi));
             dayState[1] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>M</i>"));
+            Ma.setTextColor(getResources().getColor(R.color.Silver));
+            Ma.setText(Html.fromHtml("<i>"+getResources().getString(R.string.mardi)+"</i>"));
             dayState[1] = false;
         }
     }
 
     public void mercrediAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_mercredi);
-
-        if(dayState[2] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("M");
+        if(!dayState[2]) {
+            Me.setTextColor(getResources().getColor(R.color.BelizeHole));
+            Me.setText(getResources().getString(R.string.mercredi));
             dayState[2] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>M</i>"));
+            Me.setTextColor(getResources().getColor(R.color.Silver));
+            Me.setText(Html.fromHtml("<i>"+getResources().getString(R.string.mercredi)+"</i>"));
             dayState[2] = false;
         }
     }
 
     public void jeudiAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_jeudi);
-
-        if(dayState[3] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("J");
+        if(!dayState[3]) {
+            J.setTextColor(getResources().getColor(R.color.BelizeHole));
+            J.setText(getResources().getString(R.string.jeudi));
             dayState[3] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>J</i>"));
+            J.setTextColor(getResources().getColor(R.color.Silver));
+            J.setText(Html.fromHtml("<i>" + getResources().getString(R.string.jeudi) + "</i>"));
             dayState[3] = false;
         }
     }
 
     public void vendrediAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_vendredi);
-
-        if(dayState[4] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("V");
+        if(!dayState[4]) {
+            V.setTextColor(getResources().getColor(R.color.BelizeHole));
+            V.setText(getResources().getString(R.string.vendredi));
             dayState[4] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>V</i>"));
+            V.setTextColor(getResources().getColor(R.color.Silver));
+            V.setText(Html.fromHtml("<i>" + getResources().getString(R.string.vendredi) + "</i>"));
             dayState[4] = false;
         }
     }
 
     public void samediAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_samedi);
-
-        if(dayState[5] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("S");
+        if(!dayState[5]) {
+            S.setTextColor(getResources().getColor(R.color.BelizeHole));
+            S.setText(getResources().getString(R.string.samedi));
             dayState[5] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>S</i>"));
+            S.setTextColor(getResources().getColor(R.color.Silver));
+            S.setText(Html.fromHtml("<i>" + getResources().getString(R.string.samedi) + "</i>"));
             dayState[5] = false;
         }
     }
 
     public void dimancheAction(View v){
-        TextView textView = (TextView)findViewById(R.id.tv_dimanche);
-
-        if(dayState[6] == false) {
-            textView.setTextColor(getResources().getColor(R.color.BelizeHole));
-            textView.setText("D");
+        if(!dayState[6]) {
+            D.setTextColor(getResources().getColor(R.color.BelizeHole));
+            D.setText(getResources().getString(R.string.dimanche));
             dayState[6] = true;
         }
         else {
-            textView.setTextColor(getResources().getColor(R.color.Silver));
-            textView.setText(Html.fromHtml("<i>D</i>"));
+            D.setTextColor(getResources().getColor(R.color.Silver));
+            D.setText(Html.fromHtml("<i>" + getResources().getString(R.string.dimanche) + "</i>"));
             dayState[6] = false;
         }
     }
-
 
     private void saveListAlarmeToFile(ArrayList<Alarme> listAlarme, File file) {
         try{
@@ -499,8 +484,6 @@ public class ModifierActivity extends AppCompatActivity {
                 dataOut.writeObject(alarme);
 
             dataOut.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -521,8 +504,6 @@ public class ModifierActivity extends AppCompatActivity {
             }
 
             dataIn.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

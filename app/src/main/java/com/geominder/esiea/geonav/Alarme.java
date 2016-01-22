@@ -1,15 +1,9 @@
 package com.geominder.esiea.geonav;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 
-/**
- * Created by Admin on 27/11/2015.
- */
 public class Alarme implements Serializable{
     private String titre, lieu, timeStart, timeEnd, adresse;
     private double latitude, longitude;
@@ -58,7 +52,7 @@ public class Alarme implements Serializable{
     private String createStringFromBooleanArray(boolean[] tab){
         String str = null;
         for (int i = 0; i < tab.length; i++){
-            if(tab[i] == true)
+            if(tab[i])
                 str = str + "true ";
             else
                 str = str + "false ";

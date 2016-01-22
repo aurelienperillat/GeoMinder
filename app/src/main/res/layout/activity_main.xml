@@ -20,10 +20,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Geominder"
+            android:text="@string/app_name"
             android:textColor="@color/Clouds"
             android:textStyle="bold"
-            android:textSize="20dp"/>
+            android:textSize="20sp"/>
 
     </LinearLayout>
 
@@ -64,10 +64,10 @@
             android:onClick="ajouterAction"
             android:textColor="@color/MidnightBlue"
             android:background="@drawable/background_bouton"
-            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             />
         <Button
             android:id="@+id/boutonGerer"
@@ -78,11 +78,11 @@
             android:onClick="gererAction"
             android:textColor="@color/MidnightBlue"
             android:background="@drawable/background_bouton"
-            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:layout_marginRight="6dp"
-          />
+            android:layout_marginEnd="6dp"
+            />
 
     </LinearLayout>
 

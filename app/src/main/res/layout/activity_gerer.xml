@@ -20,10 +20,11 @@
             android:id="@+id/boutonback1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:src="@drawable/left"
+            android:contentDescription="@string/arrow"
             android:background="@color/BelizeHole"
             android:onClick="homeAction"/>
 
@@ -31,10 +32,11 @@
             android:id="@+id/boutonPlus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:src="@drawable/plus"
+            android:contentDescription="@string/plus"
             android:background="@color/BelizeHole"
             android:onClick="ajouterAction"/>
 
@@ -42,11 +44,13 @@
             android:id="@+id/gererTitre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/boutonback1"
+            android:layout_toStartOf="@+id/boutonPlus"
             android:text="@string/gerer"
             android:textColor="@color/Clouds"
-            android:layout_weight="0.9"
             android:textStyle="bold"
-            android:textSize="20dp"
+            android:textSize="20sp"
+            android:textAlignment="center"
             android:layout_centerInParent="true"/>
 
     </RelativeLayout>
