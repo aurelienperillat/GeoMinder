@@ -226,7 +226,7 @@ public class GererActivity extends AppCompatActivity {
 
                             geofence = new Geofence.Builder().setRequestId(listAlarme.get(position).getTitre())
                                     .setCircularRegion(listAlarme.get(position).getLatitude(), listAlarme.get(position).getLongitude(), 500)
-                                    .setExpirationDuration(10000)
+                                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
                                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                                     .build();
 

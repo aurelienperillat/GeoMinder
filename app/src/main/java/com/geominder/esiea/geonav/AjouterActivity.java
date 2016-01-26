@@ -250,7 +250,7 @@ public class AjouterActivity extends AppCompatActivity {
 
             geofence = new Geofence.Builder().setRequestId(alarme.getTitre())
                     .setCircularRegion(alarme.getLatitude(), alarme.getLongitude(), 500)
-                    .setExpirationDuration(10000)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .build();
 
